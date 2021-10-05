@@ -18,34 +18,35 @@ end
 Then /I should see "(.*)" before "(.*)"/ do |e1, e2|
   #  ensure that that e1 occurs before e2.
   #  page.body is the entire content of the page as a string.
-  if(page.body.index(e1) > page.body.index(e2))
-    fail "e1 occurs after e2"
-  fail "Unimplemented"
+  assert(page.body.index(e1) < page.body.index(e2))
+
 end
 
 # Make it easier to express checking or unchecking several boxes at once
 #  "When I uncheck the following ratings: PG, G, R"
 #  "When I check the following ratings: G"
 
-When /I (un)?check the following ratings: (.*)/ do |uncheck, rating_list|
+When /I (un)?check the following ratings:(.*)/ do |uncheck, rating_list|
   # HINT: use String#split to split up the rating_list, then
   #   iterate over the ratings and reuse the "When I check..." or
   #   "When I uncheck..." steps in lines 89-95 of web_steps.rb
   
-  rating_list.split(', ').each do |rating|
-    step %{I #{uncheck.nil? ? '' : 'un'}check "ratings_#{rating}"}
+  ratings = rating_list.split(', ')
+  if uncheck 
+    ratings.each{|rating| uncheck("ratings_" + rating)}
+  else
+    ratings.each{|rating| check("ratings_" + rating)}
   end
-
 end
 
-Then /I should see all the movies/ do
+Then /I should see all the movies with ratings:(.*)/ do |rating_list|
   # Make sure that all the movies in the app are visible in the table
 
   ratings = rating_list.split(', ')
   movies = []
   ratings.each{|rating| movies = movies + Movie.select{|movie| movie.rating == rating}}
 
-  if filter_out
+  if true
     movies.each{|movie| assert(!page.body.include?(movie.title))}
   else
     movies.each{|movie| assert(page.body.include?(movie.title))}
@@ -54,9 +55,4 @@ Then /I should see all the movies/ do
 
 end
 
-When('I check the following ratings: PG, R') do
-    rating_list.split(', ').each do |rating|
-    step %{I #{uncheck.nil? ? '' : 'un'}check "ratings_#{rating}"}
-  end
-end
-end
+
