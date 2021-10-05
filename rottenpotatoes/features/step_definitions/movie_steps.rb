@@ -32,10 +32,31 @@ When /I (un)?check the following ratings: (.*)/ do |uncheck, rating_list|
   #   iterate over the ratings and reuse the "When I check..." or
   #   "When I uncheck..." steps in lines 89-95 of web_steps.rb
   
+  rating_list.split(', ').each do |rating|
+    step %{I #{uncheck.nil? ? '' : 'un'}check "ratings_#{rating}"}
+  end
+
 end
 
 Then /I should see all the movies/ do
   # Make sure that all the movies in the app are visible in the table
 
+  ratings = rating_list.split(', ')
+  movies = []
+  ratings.each{|rating| movies = movies + Movie.select{|movie| movie.rating == rating}}
+
+  if filter_out
+    movies.each{|movie| assert(!page.body.include?(movie.title))}
+  else
+    movies.each{|movie| assert(page.body.include?(movie.title))}
+  end
+  fail "Unimplemented"
+
+end
+
+When('I check the following ratings: PG, R') do
+    rating_list.split(', ').each do |rating|
+    step %{I #{uncheck.nil? ? '' : 'un'}check "ratings_#{rating}"}
+  end
 end
 end
