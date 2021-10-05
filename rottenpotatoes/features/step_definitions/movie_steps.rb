@@ -6,7 +6,6 @@ Given /the following movies exist/ do |movies_table|
     # you should arrange to add that movie to the database here.
     Movie.create(movie)
   end
-  fail "Unimplemented"
 end
 
 Then /(.*) seed movies should exist/ do | n_seeds |
@@ -38,4 +37,5 @@ end
 Then /I should see all the movies/ do
   # Make sure that all the movies in the app are visible in the table
 
+end
 end
