@@ -30,13 +30,13 @@ Scenario: restrict to movies with 'PG' or 'R' ratings
   # enter step to "submit" the search form on the homepage
   When I press "ratings_submit"
   # enter step(s) to ensure that PG and R movies are visible
-  Then I should see all the movies with ratings:PG, R
+  Then I should see all movies with ratings:PG, R
   # enter step(s) to ensure that other movies are not visible
-  Then I should not see all the movies with ratings:G, PG-13
+  Then I should not see all movies with ratings:G, PG-13
   
 
 Scenario: all ratings selected
   # see assignment
   When I check the following ratings:G, R, PG-13, PG
   When I press "ratings_submit"
-  Then I should see all the movies with ratings:PG, G, PG-13, R
+  Then I should see all movies with ratings:PG, G, PG-13, R

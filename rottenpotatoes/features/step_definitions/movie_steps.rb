@@ -18,7 +18,7 @@ end
 Then /I should see "(.*)" before "(.*)"/ do |e1, e2|
   #  ensure that that e1 occurs before e2.
   #  page.body is the entire content of the page as a string.
-  assert(page.body.index(e1) < page.body.index(e2))
+  expect(page.body.index(e1) < page.body.index(e2))
 
 end
 
@@ -26,35 +26,36 @@ end
 #  "When I uncheck the following ratings: PG, G, R"
 #  "When I check the following ratings: G"
 
-When /I (un)?check the following ratings:(.*)/ do |uncheck, rating_list|
+When /I (un)?check the following ratings:(.*)/ do |check_option, rating_list|
   # HINT: use String#split to split up the rating_list, then
   #   iterate over the ratings and reuse the "When I check..." or
   #   "When I uncheck..." steps in lines 89-95 of web_steps.rb
   
   ratings = rating_list.split(', ')
-  if uncheck 
+  if check_option 
     ratings.each{|rating| uncheck("ratings_" + rating)}
   else
     ratings.each{|rating| check("ratings_" + rating)}
   end
 end
 
-Then /I should (not )?see all the movies with ratings:(.*)/ do |option, rating_list1|
+Then /I should (not )?see all movies with ratings:(.*)/ do |option, rating_list|
   # Make sure that all the movies in the app are visible in the table
 
-  ratings = rating_list1.split(', ')
-  movies = []
+  ratings = rating_list.split(', ')
+  movie_array = []
   
-  ratings.each{|rating| movies = movies + Movie.select{|movie| movie.rating == rating}}
+  ratings.each do |rating|
+    movie_array +=  Movie.select{|movie| movie.rating == rating}
+  end
   
-  
-  if !option
-    movies.each do |movie|
-      expect(page).to have_content(movie.title)
+  if option
+    movie_array.each do |movie|
+      expect(page).to have_no_content(movie.title)
     end
   else
-    movies.each do |movie|
-      expect(page).to have_no_content(movie.title)
+    movie_array.each do |movie|
+      expect(page).to have_content(movie.title)
     end
   end
 end
