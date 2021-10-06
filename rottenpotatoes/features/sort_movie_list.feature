@@ -24,8 +24,13 @@ Background: movies have been added to database
 
 Scenario: sort movies alphabetically
   When I follow "Movie Title"
-  # your steps here
+  When I check the following ratings:R, G
+  When I press "ratings_submit"
+  Then I should see "Aladdin" before "Amelie"
+  
 
 Scenario: sort movies in increasing order of release date
   When I follow "Release Date"
-  # your steps here
+  When I check the following ratings:PG-13, PG
+  When I press "ratings_submit"
+  Then I should see "Raiders of the Lost Ark" before "The Incredibles"
