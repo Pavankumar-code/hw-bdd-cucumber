@@ -39,20 +39,24 @@ When /I (un)?check the following ratings:(.*)/ do |uncheck, rating_list|
   end
 end
 
-Then /I should see all the movies with ratings:(.*)/ do |rating_list|
+Then /I should (not )?see all the movies with ratings:(.*)/ do |option, rating_list1|
   # Make sure that all the movies in the app are visible in the table
 
-  ratings = rating_list.split(', ')
+  ratings = rating_list1.split(', ')
   movies = []
+  
   ratings.each{|rating| movies = movies + Movie.select{|movie| movie.rating == rating}}
-
-  if true
-    movies.each{|movie| assert(!page.body.include?(movie.title))}
+  
+  
+  if !option
+    movies.each do |movie|
+      expect(page).to have_content(movie.title)
+    end
   else
-    movies.each{|movie| assert(page.body.include?(movie.title))}
+    movies.each do |movie|
+      expect(page).to have_no_content(movie.title)
+    end
   end
-  fail "Unimplemented"
-
 end
 
 
