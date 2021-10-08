@@ -33,9 +33,13 @@ When /I (un)?check the following ratings:(.*)/ do |check_option, rating_list|
   
   ratings = rating_list.split(', ')
   if check_option 
-    ratings.each{|rating| uncheck("ratings_" + rating)}
+    ratings.each do |rating|
+      uncheck("ratings_" + rating)
+    end
   else
-    ratings.each{|rating| check("ratings_" + rating)}
+    ratings.each do |rating|
+      check("ratings_" + rating)
+    end
   end
 end
 
