@@ -23,14 +23,22 @@ Background: movies have been added to database
   Then 10 seed movies should exist
 
 Scenario: sort movies alphabetically
+  # Scenario for Movie Title Sorting
   When I follow "Movie Title"
+  # step(s) to check the 'R' and 'G' Ratings
   When I check the following ratings:R, G
+  # step to "submit" the search form on the homepage
   When I press "ratings_submit"
+  # step(s) to ensure Sorting is proper
   Then I should see "Aladdin" before "Amelie"
   
 
 Scenario: sort movies in increasing order of release date
+  # Scenario for Release Date Sorting
   When I follow "Release Date"
+  # step(s) to check the 'R' and 'G' Ratings
   When I check the following ratings:PG-13, PG
+  # step to "submit" the search form on the homepage
   When I press "ratings_submit"
+  # step(s) to ensure Sorting is proper
   Then I should see "Raiders of the Lost Ark" before "The Incredibles"

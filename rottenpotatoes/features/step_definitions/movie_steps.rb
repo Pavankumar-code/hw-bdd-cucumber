@@ -32,15 +32,21 @@ When /I (un)?check the following ratings:(.*)/ do |check_option, rating_list|
   #   "When I uncheck..." steps in lines 89-95 of web_steps.rb
   
   ratings = rating_list.split(', ')
+  
   if check_option 
+    
     ratings.each do |rating|
       uncheck("ratings_" + rating)
     end
+    
   else
+    
     ratings.each do |rating|
       check("ratings_" + rating)
     end
+    
   end
+  
 end
 
 Then /I should (not )?see all movies with ratings:(.*)/ do |option, rating_list|
@@ -54,14 +60,19 @@ Then /I should (not )?see all movies with ratings:(.*)/ do |option, rating_list|
   end
   
   if option
+    
     movie_array.each do |movie|
       expect(page).to have_no_content(movie.title)
     end
+    
   else
+    
     movie_array.each do |movie|
       expect(page).to have_content(movie.title)
     end
+    
   end
+  
 end
 
 
